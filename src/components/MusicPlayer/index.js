@@ -17,6 +17,12 @@ const MusicPlayer = () => {
   )
 }
 
-const CSS = css
+const CSS = css`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: relative;
+  color: white;
+`
 
 export default MusicPlayer
