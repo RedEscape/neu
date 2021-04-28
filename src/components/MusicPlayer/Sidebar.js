@@ -2,14 +2,14 @@
 import React from 'react'
 import { css, jsx } from '@emotion/react'
 
-const Replace = () => {
+const Sidebar = ({ children }) => {
   return (
-    <div className="Replace" css={CSS}>
-      {/*  */}
+    <div className="Sidebar" css={CSS}>
+      {children}
     </div>
   )
 }
 
 const CSS = css
 
-export default Replace
+export default Sidebar
