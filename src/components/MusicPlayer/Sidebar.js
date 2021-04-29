@@ -31,7 +31,8 @@ const Sidebar = () => {
     })
   }
 
-  const handleModal = () => ({ ...sidebarState, modal: !sidebarState.modal })
+  const handleModal = () =>
+    setState({ ...sidebarState, modal: !sidebarState.modal })
 
   return (
     <ul className="Sidebar" css={CSS}>

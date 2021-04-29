@@ -1,20 +1,26 @@
 /** @jsx jsx */
-import React, { useReducer, createContext } from 'react'
+import React, { createContext, useReducer } from 'react'
 import { css, jsx } from '@emotion/react'
 import Topbar from './Topbar'
 import Sidebar from './Sidebar'
-import Playbar from './Playbar'
 import Content from './Content'
+import Playbar from './Playbar'
+import media from '../../media.json'
 
 export const StoreContext = createContext(null)
 
 const DEFAULT_PLAYLIST = 'home'
 
 const initialState = {
+  media,
+  addSongToPlaylistId: '',
   currentPlaylist: DEFAULT_PLAYLIST,
   playlists: {
-    home: new Set(),
-    favorites: new Set()
+    home: new Set(media.ids),
+    favorites: new Set(),
+    rock: new Set(),
+    rap: new Set(),
+    'old school': new Set()
   }
 }
 
@@ -27,19 +33,37 @@ const reducer = (state, action) => {
       }
     case 'SET_PLAYLIST':
       return { ...state, currentPlaylist: action.playlist }
+    case 'ADD_FAVORITE':
+      state.playlists.favorites.add(action.songId)
+      return { ...state }
+    case 'REMOVE_FAVORITE':
+      state.playlists.favorites.delete(action.songId)
+      return { ...state }
+    case 'SET_ADD_SONG_TO_PLAYLIST_ID':
+      return { ...state, addSongToPlaylistId: action.songId }
+    case 'ADD_SONG_TO_PLAYLIST':
+      state.playlists[action.playlist].add(state.addSongToPlaylistId)
+      return { ...state, addSongToPlaylistId: '' }
+    case 'CANCEL_ADD_SONG_TO_PLAYLIST':
+      return { ...state, addSongToPlaylistId: '' }
+    case 'REMOVE_SONG_FROM_PLAYLIST':
+      state.playlists[state.currentPlaylist].delete(action.songId)
+      return { ...state }
   }
+
   return state
 }
 
 const MusicPlayer = () => {
   const [state, dispatch] = useReducer(reducer, initialState)
+
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
-      <div className="MusicPlayer" css={CSS}>
+      <div css={CSS}>
         <Topbar />
         <Sidebar />
-        <Content></Content>
-        <Playbar />
+        <Content />
+        <Playbar></Playbar>
       </div>
     </StoreContext.Provider>
   )
